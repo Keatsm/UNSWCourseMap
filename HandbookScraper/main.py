@@ -33,29 +33,60 @@ button = WebDriverWait(driver, 10).until(
     EC.element_to_be_clickable((By.XPATH, "//button[descendant::strong[text()='COMP']]")))
 driver.execute_script("arguments[0].click();", button)
 
-# Wait until one of the COMP courses is found so we know the search results are updated
-sampleCOMP = WebDriverWait(driver, 10).until(
-    EC.element_to_be_clickable((By.XPATH, "//a[descendant::span[text()='COMP1010 The Art of Computing']]")))
-
 # Find the parent div for the search results
 parent_div = WebDriverWait(driver, 10).until(
     EC.presence_of_element_located((By.XPATH, "//div[@id='search-results']")))
 
-# Find all child div elements of the parent div
-courses = parent_div.find_elements(By.XPATH, "./div")
+# Set what the title is for the course that is initially at the search
+prev_title = parent_div.find_element(By.XPATH, "//div[1]/a/span/span/span").text
 
-# Loop through each child div element
-for course in courses:
-    # Find the <a> tag within each child div
-    a_tag = course.find_element(By.XPATH, ".//a")
-    
-    # Get the href attribute value of the <a> tag
-    href_value = a_tag.get_attribute("href")
-    
-    # Print the href value
-    print(href_value)
+# Check if search has changed
+def check_for_search_changes(_):
+    global prev_title, parent_div
+    try:
+        parent_div = driver.find_element(By.XPATH, "//div[@id='search-results']")
+        title = parent_div.find_element(By.XPATH, "//div[1]/a/span/span/span")
+    except Exception:
+        print(Exception)
+        return False
+    check = prev_title != title.text
+    print(prev_title, title.text)
+    prev_title = title.text
+    return check
 
+# Wait for search results to update
+WebDriverWait(driver, 30).until(check_for_search_changes)
 
+morePages = True
+
+# Repeat while there are more pages to go through
+while morePages:
+    # Find all child div elements of the parent div
+    courses = parent_div.find_elements(By.XPATH, "./div")
+
+    # Loop through each child div element
+    for course in courses:
+        # Find the <a> tag within each child div
+        a_tag = course.find_element(By.XPATH, ".//a")
+        
+        # Get the href attribute value of the <a> tag
+        href_value = a_tag.get_attribute("href")
+        
+        # Print the href value
+        print(href_value)
+        
+    # Check if the right arrow to change page exists (which implies that there are more pages)
+    morePages = len(driver.find_elements(By.XPATH, "//i[text()='keyboard_arrow_right']")) > 0
+    if morePages:
+        right_arrow = driver.find_element(By.XPATH, "//i[text()='keyboard_arrow_right']")
+        # Click arrow
+        driver.execute_script("arguments[0].click();", right_arrow)
+        # Wait for update
+        WebDriverWait(driver, 30).until(check_for_search_changes)
+
+# Courses that won't appear on this list that we want to include
+# Include SENG in the above search?
+manual_courses = []
 
 
 # Close the browser
