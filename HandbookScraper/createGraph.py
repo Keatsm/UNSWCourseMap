@@ -12,7 +12,7 @@ def initNode(graph, url):
         driver.get(url)
         courseCode = driver.find_element(By.XPATH, "//div[@class='css-u09y4s-Box-Flex-StyledFlex e3iudi70']/div[1]/h5").text
         courseTitle = driver.find_element(By.XPATH, "//h2").text
-        # Not all courses has prerequisites; if the conditions box is not found, assume empty
+        # Not all courses have prerequisites; if the conditions box is not found, assume empty
         try:
             prereqs = driver.find_element(By.XPATH, "//div[@id='ConditionsforEnrolment']/div[2]/div").text
         except:
@@ -29,9 +29,5 @@ def createGraph(urls):
     graph = nx.Graph()
     for url in urls:
         initNode(graph, url)
-    
-    
-    
-    
     
     return graph
