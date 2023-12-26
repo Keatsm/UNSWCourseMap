@@ -17,7 +17,7 @@ def check_for_search_changes(_):
         # print(Exception)
         return False
     check = prevTitle != title.text
-    # print(prevTitle, title.text)
+    print(prevTitle, title.text)
     prevTitle = title.text
     return check
 
@@ -30,12 +30,12 @@ def getPages():
     # Press 'Course'
     button = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.ID, 'react-tabs-6')))
-    button.click()
+    driver.execute_script("arguments[0].click();", button)
 
     # Press 'Subject Area'
     button = WebDriverWait(driver, 10).until(
         EC.visibility_of_element_located((By.XPATH, "//div[@style='overflow: hidden;']/div[6]/div[1]")))
-    button.click()
+    driver.execute_script("arguments[0].click();", button)
 
     # Locate the subject area search bar
     searchBar = WebDriverWait(driver, 10).until(
@@ -89,7 +89,7 @@ def getPages():
         # Loop through each child div element
         for course in courses:
             # Find the <a> tag within each child div
-            a_tag = course.find_element(By.XPATH, ".//a")
+            a_tag = WebDriverWait(course, 10).until(EC.presence_of_element_located((By.XPATH, "./a")))
             
             # Get the href attribute value of the <a> tag
             hrefValue = a_tag.get_attribute("href")
