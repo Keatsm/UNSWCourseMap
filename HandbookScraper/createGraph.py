@@ -1,7 +1,7 @@
 import networkx as nx
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-import time
+import time, re
 
 orNodes = 0
 
@@ -36,15 +36,25 @@ def initNode(graph, url):
         initNode(graph, url)
         
 def createEdges(graph, node, orNodes):
-    prereqString = node['attr']['prereqs']
+    prereqString = node[1]['attr']['prereqs']
     if prereqString.startswith('Exlusion') or prereqString == '':
         return
+    words = prereqString.split(' ')
+    for word in words:
+        match = re.search(r'(?:COMP|MATH|SENG)[0-9]{4}', word)
+        if match and graph.has_node(match.group()):
+            print(match.group())
+            graph.add_edge(match.group(), node[0])
 
 def createGraph(urls):
-    graph = nx.Graph()
+    graph = nx.DiGraph()
     for url in urls:
         initNode(graph, url)
+    
     # orNodes to be added to graph after we have looped through existing nodes
     orNodes = []
+
+    for node in graph.nodes(data=True):
+        createEdges(graph, node, orNodes)
     
     return graph
