@@ -17,7 +17,7 @@ def check_for_search_changes(_):
         # print(Exception)
         return False
     check = prevTitle != title.text
-    print(prevTitle, title.text)
+    # print(prevTitle, title.text)
     prevTitle = title.text
     return check
 

@@ -48,9 +48,12 @@ def createEdges(graph, node):
     lastNode = None
     lastEdge = None
     prereqString = node[1]['attr']['prereqs']
+    prereqString = re.sub(r'\[', r'(', prereqString)
+    prereqString = re.sub(r'\]', r')', prereqString)
     prereqString = re.sub(r'\(', r'( ', prereqString)
     prereqString = re.sub(r'\)', r' )', prereqString)
     prereqString = re.sub(r',', r' ,', prereqString)
+    prereqString = re.sub('/', ' or ', prereqString)
     print('PREREQS:', prereqString)
     if prereqString.startswith('Exlusion') or prereqString == '':
         return
@@ -100,9 +103,18 @@ def analysePrereq(graph, words, label, node=None):
         elif label == 'or' and (word.lower() == 'and' or word == ','):
             break
         else:
-            # match = re.search(r'(?:COMP|MATH|SENG)[0-9]{4}', word)
-            if graph.has_node(word) and word != node:
+            codeMatch = re.search(r'(?:COMP|MATH|SENG)[0-9]{4}', word)
+            numberMatch = re.search(r'[0-9]{4}', word)
+            if (codeMatch and (graph.has_node(codeMatch.group()))) and codeMatch.group() != node:
                 # print(match.group())
+                lastNode = codeMatch.group()
+                lastEdge = (codeMatch.group(), node)
+                graph.add_edge(*lastEdge)
+            elif numberMatch and (graph.has_node('COMP' + numberMatch.group())) and 'COMP' + numberMatch.group() != node:
+                lastNode = 'COMP' + numberMatch.group()
+                lastEdge = ('COMP' + numberMatch.group(), node)
+                graph.add_edge(*lastEdge)
+            elif graph.has_node(word) and word != node:
                 lastNode = word
                 lastEdge = (word, node)
                 graph.add_edge(*lastEdge)
