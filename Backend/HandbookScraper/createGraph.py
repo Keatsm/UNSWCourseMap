@@ -55,7 +55,7 @@ def createEdges(graph, node):
     prereqString = re.sub(r',', r' ,', prereqString)
     prereqString = re.sub('/', ' or ', prereqString)
     print('PREREQS:', prereqString)
-    if prereqString.startswith('Exlusion') or prereqString == '':
+    if prereqString.startswith('Exclusion') or prereqString == '':
         return
     words = prereqString.split(' ')
     res = analysePrereq(graph, words, None, node[0])

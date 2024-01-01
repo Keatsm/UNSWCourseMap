@@ -4,15 +4,15 @@ import matplotlib.pyplot as plt
 import networkx as nx
 from dotenv import load_dotenv
 import os
-from neo4j import GraphDatabase
-import logging
-import sys
+# from neo4j import GraphDatabase
+# import logging
+# import sys
 from py2neo import Graph
 
-handler = logging.StreamHandler(sys.stdout)
-handler.setLevel(logging.DEBUG)
-logging.getLogger("neo4j").addHandler(handler)
-logging.getLogger("neo4j").setLevel(logging.DEBUG)
+# handler = logging.StreamHandler(sys.stdout)
+# handler.setLevel(logging.DEBUG)
+# logging.getLogger("neo4j").addHandler(handler)
+# logging.getLogger("neo4j").setLevel(logging.DEBUG)
 
 load_dotenv()
 
@@ -27,11 +27,23 @@ def clearDB():
 
 def addGraphToDB(graph):
     for node, data in graph.nodes(data=True):
-        session.run("CREATE (n:Node {id: $id, attributes: $attrs})", id=node, attrs=data['attr'])
+        attrPrimitive = {
+            key: value if not isinstance(value, (dict, list)) else str(value)
+            for key, value in data['attr'].items()
+        }
+        if not attrPrimitive['specialNode']:
+            attrPrimitive['label'] = node
+        query = (
+            "CREATE (n:MyNode {id: $id, "
+            + ", ".join([f"{key}: ${key}" for key in attrPrimitive])
+            + "})"
+        )
+        session.run(query, id=node, **attrPrimitive)
     
     for edge in graph.edges():
-        session.run("MATCH (a:Node {id: $src}), (b:Node {id: $dest}) "
-                    "CREATE (a)-[:CONNECTED]->(b)", src=edge[0], dest=edge[1])
+        print(edge)
+        session.run("""MATCH (a:MyNode {id: $src}), (b:MyNode {id: $dest})
+                    CREATE (a)-[:REQUIRES]->(b)""", src=edge[0], dest=edge[1])
 
 if __name__ == '__main__':
     clearDB()
