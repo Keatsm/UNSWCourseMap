@@ -14,6 +14,7 @@ urls = [
     'https://www.handbook.unsw.edu.au/undergraduate/courses/2024/COMP2511/?year=2024'
 ]
 
+# Some weird cases
 urlsWeird = [
     'https://www.handbook.unsw.edu.au/undergraduate/courses/2024/COMP9491?year=2024',
     'https://www.handbook.unsw.edu.au/undergraduate/courses/2024/COMP3411?year=2024',
@@ -23,6 +24,7 @@ urlsWeird = [
     'https://www.handbook.unsw.edu.au/undergraduate/courses/2024/COMP4418?year=2024'
 ]
 
+# Translating square brackets
 urlsSquare = [
     'https://www.handbook.unsw.edu.au/undergraduate/courses/2024/COMP9243?year=2024',
     'https://www.handbook.unsw.edu.au/undergraduate/courses/2024/COMP3331?year=2024',
@@ -30,6 +32,7 @@ urlsSquare = [
     'https://www.handbook.unsw.edu.au/undergraduate/courses/2024/COMP3891?year=2024'
 ]
 
+# Need to double check this case and fix it I beleive
 properCollapse = [
     'https://www.handbook.unsw.edu.au/undergraduate/courses/2024/COMP3151?year=2024'
 ]

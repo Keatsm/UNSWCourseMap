@@ -26,7 +26,7 @@ def initNode(graph, url):
         except:
             prereqs = ''
         print(courseCode, courseTitle, prereqs, offeringTerms, field)
-        graph.add_node(courseCode, attr={'specialNode' : False, 'courseTitle' : courseTitle, 'prereqs' : prereqs, 'offeringTerms' : offeringTerms, 'field' : field})
+        graph.add_node(courseCode, attr={'specialNode' : False, 'courseTitle' : courseTitle, 'prereqs' : prereqs, 'offeringTerms' : offeringTerms, 'field' : field, 'url': url})
         driver.close()
     except Exception as e:
         print(str(e))
@@ -48,13 +48,15 @@ def createEdges(graph, node):
     lastNode = None
     lastEdge = None
     prereqString = node[1]['attr']['prereqs']
+    
+    # Clean up the string a bunch to make parsing easier
     prereqString = re.sub(r'\[', r'(', prereqString)
     prereqString = re.sub(r'\]', r')', prereqString)
     prereqString = re.sub(r'\(', r'( ', prereqString)
     prereqString = re.sub(r'\)', r' )', prereqString)
     prereqString = re.sub(r',', r' ,', prereqString)
     prereqString = re.sub('/', ' or ', prereqString)
-    print('PREREQS:', prereqString)
+    
     if prereqString.startswith('Exclusion') or prereqString == '':
         return
     words = prereqString.split(' ')
@@ -63,7 +65,8 @@ def createEdges(graph, node):
     # graph.remove_node(node[0])
     # nx.relabel_nodes(graph, {res[0] : node[0]})
 
-
+# Variables needed for 'or' nodes as we need to be able to add them into the or (which would precede the last node)
+# and delete the original edge that was created for it
 lastNode = None
 lastEdge = None
 def analysePrereq(graph, words, label, node=None):
@@ -106,19 +109,23 @@ def analysePrereq(graph, words, label, node=None):
             codeMatch = re.search(r'(?:COMP|MATH|SENG)[0-9]{4}', word)
             numberMatch = re.search(r'[0-9]{4}', word)
             if (codeMatch and (graph.has_node(codeMatch.group()))) and codeMatch.group() != node:
-                # print(match.group())
                 lastNode = codeMatch.group()
                 lastEdge = (codeMatch.group(), node)
                 graph.add_edge(*lastEdge)
+            # Edge case where only the number (not the full code) is given
             elif numberMatch and (graph.has_node('COMP' + numberMatch.group())) and 'COMP' + numberMatch.group() != node:
                 lastNode = 'COMP' + numberMatch.group()
                 lastEdge = ('COMP' + numberMatch.group(), node)
                 graph.add_edge(*lastEdge)
+            # This is for the case where we have added in a previous group node (for example) into the list of words
+            # for an or node and this wouldn't be matched using the above regex pattern
             elif graph.has_node(word) and word != node:
                 lastNode = word
                 lastEdge = (word, node)
                 graph.add_edge(*lastEdge)
         i += 1
+    # Need to check if we should collapse a group/or node (eg if such node only has one indegree)
+    # In that situation, it may as well just link that one node directly to the parent
     if graph.nodes[node]['attr']['specialNode'] == True:
         if graph.in_degree(node) == 0:
             print(f'Deleting {node}')
@@ -138,16 +145,10 @@ def createGraph(urls):
     graph = nx.DiGraph()
     for url in urls:
         initNode(graph, url)
-    
-    # specialNodes to be added to graph after we have looped through existing nodes
-    # tuple with unique ID and then actual label
-    # specialNodes = []
 
     # Create a copy so we don't iterate over newly created special nodes
     for node in list(graph.nodes(data=True)).copy():
         createEdges(graph, node)
-    
-    # for node in specialNodes:
-    #     graph.add_edge(node[0], attr={'label': node[1]})
+
     
     return graph

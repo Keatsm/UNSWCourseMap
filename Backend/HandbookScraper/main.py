@@ -4,15 +4,8 @@ import matplotlib.pyplot as plt
 import networkx as nx
 from dotenv import load_dotenv
 import os
-# from neo4j import GraphDatabase
-# import logging
-# import sys
 from py2neo import Graph
 
-# handler = logging.StreamHandler(sys.stdout)
-# handler.setLevel(logging.DEBUG)
-# logging.getLogger("neo4j").addHandler(handler)
-# logging.getLogger("neo4j").setLevel(logging.DEBUG)
 
 load_dotenv()
 
@@ -27,6 +20,7 @@ def clearDB():
 
 def addGraphToDB(graph):
     for node, data in graph.nodes(data=True):
+        # Translate the data dictionary to primitive values
         attrPrimitive = {
             key: value if not isinstance(value, (dict, list)) else str(value)
             for key, value in data['attr'].items()
@@ -41,13 +35,15 @@ def addGraphToDB(graph):
         session.run(query, id=node, **attrPrimitive)
     
     for edge in graph.edges():
-        print(edge)
         session.run("""MATCH (a:MyNode {id: $src}), (b:MyNode {id: $dest})
                     CREATE (a)-[:REQUIRES]->(b)""", src=edge[0], dest=edge[1])
 
 if __name__ == '__main__':
     clearDB()
+    
     graph = createGraph(getPages())
     addGraphToDB(graph)
+    
+    # Visualize the graph
     nx.draw(graph, with_labels=True, font_weight='bold')
     plt.show()
