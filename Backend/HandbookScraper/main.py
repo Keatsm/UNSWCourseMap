@@ -2,12 +2,12 @@ from getPages import getPages
 from createGraph import createGraph
 import matplotlib.pyplot as plt
 import networkx as nx
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 import os
 from py2neo import Graph
 
 
-load_dotenv()
+load_dotenv(find_dotenv())
 
 uri = os.getenv("NEO4J_URI")
 username = os.getenv("NEO4J_USERNAME")
