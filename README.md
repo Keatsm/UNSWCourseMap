@@ -17,6 +17,6 @@
 - [ ] Enabled/disable different terms
 - [ ] Hover on node for additional information (maybe a modal with a link to course page)
 - [ ] 'Show me a random course' button
-- [ ] Add other coruses (eg COMM, ARTS, etc); maybe enabled which ones you want
+- [ ] Add other courses (eg COMM, ARTS, etc); maybe enabled which ones you want
 
 
