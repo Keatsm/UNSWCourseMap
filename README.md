@@ -8,6 +8,7 @@
 - [x] Create flask server for querying database
 - [x] Create basic frontend that displays graph
 - [ ] Fix bug where a singular course left in a group won't collapse to be a single prereq
+- [ ] COMP9301 glitch
 - [ ] Make certain course nodes a bigger scale based on how many people take the course (scrape timetable as well)
 - [ ] Deploy
 - [ ] Update readme with additional information/instructions
