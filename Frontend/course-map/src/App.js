@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import GraphVisualization from './components/GraphVisualisation.js';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css'
 
 const App = () => {
   // Fetch graph data from Neo4j or mock data
@@ -15,7 +17,7 @@ const App = () => {
           edges: []
         }
         for (let node of response.data.nodes) {
-          newData.nodes.push({id: node.id, label: node.properties.label})
+          newData.nodes.push({id: node.id, label: node.properties.label, data: node.properties})
         }
         for (let edge of response.data.relationships) {
           newData.edges.push({from: edge.startNode, to: edge.endNode})
@@ -32,7 +34,7 @@ const App = () => {
   return (
     <div>
       <h1>UNSW COMP Course Map</h1>
-      <GraphVisualization graphData={graphData} />
+      <GraphVisualization graphData={graphData} titleHeight={document.querySelector('h1') == null ? 10 : document.querySelector('h1').offsetHeight}/>
     </div>
   );
 };

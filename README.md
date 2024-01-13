@@ -12,11 +12,12 @@
 - [ ] Make certain course nodes a bigger scale based on how many people take the course (scrape timetable as well)
 - [ ] Deploy
 - [ ] Update readme with additional information/instructions
-- [ ] Improve styling of code (minimal)
+- [ ] Improve styling of code (mostly for react code)
 - [ ] Generally make frontend more appealling
 - [ ] Colour code nodes on subject area
 - [ ] Enabled/disable different terms
-- [ ] Hover on node for additional information (maybe a modal with a link to course page)
+- [X] Hover on node for additional information (maybe a modal with a link to course page)
+- [ ] Add link to course page (update db) and also remove annoying prereq text before prereq 
 - [ ] 'Show me a random course' button
 - [ ] Add other courses (eg COMM, ARTS, etc); maybe enabled which ones you want
 
