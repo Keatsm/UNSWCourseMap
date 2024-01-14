@@ -22,7 +22,9 @@ def initNode(graph, url):
             field = ''
         # Not all courses have prerequisites; if the conditions box is not found, assume empty
         try:
-            prereqs = driver.find_element(By.XPATH, "//div[@id='ConditionsforEnrolment']/div[2]/div").text
+            prereqs = re.sub('Prerequisites:', '', driver.find_element(By.XPATH, "//div[@id='ConditionsforEnrolment']/div[2]/div").text)
+            prereqs = re.sub('Prerequisite:', '', prereqs)
+            print(prereqs)
         except:
             prereqs = ''
         print(courseCode, courseTitle, prereqs, offeringTerms, field)

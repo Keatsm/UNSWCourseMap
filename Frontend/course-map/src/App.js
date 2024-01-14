@@ -7,6 +7,7 @@ import './App.css'
 const App = () => {
   // Fetch graph data from Neo4j or mock data
   const [graphData, setGraphData] = useState({nodes: [], edges: []});
+  
 
   // Fetch graph data from Neo4j or API on component mount
   useEffect(() => {
@@ -32,7 +33,11 @@ const App = () => {
   }, []);
 
   return (
-    <div>
+    <div style={{
+      display : 'flex',
+      flexDirection : 'column',
+      alignItems : 'center'
+    }}>
       <h1>UNSW COMP Course Map</h1>
       <GraphVisualization graphData={graphData} titleHeight={document.querySelector('h1') == null ? 10 : document.querySelector('h1').offsetHeight}/>
     </div>
