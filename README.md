@@ -22,5 +22,6 @@
 - [ ] 'Show me a random course' button
 - [ ] Add other courses (eg COMM, ARTS, etc); maybe enabled which ones you want
 - [ ] Add postgraduate option
+- [ ] Add any mark prerequisites as edges on the graph
 
 
