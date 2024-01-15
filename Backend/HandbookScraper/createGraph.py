@@ -1,9 +1,23 @@
 import networkx as nx
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-import time, re
+from bs4 import BeautifulSoup
+import time, re, requests
 
 specialNodes = 0
+
+def getCapacity(timetableLink):
+    response = requests.get(timetableLink)
+    htmlContent = response.content
+    print(timetableLink)
+    soup = BeautifulSoup(htmlContent, 'html.parser')
+    tds = soup.find_all('td', class_='formBody')
+    for td in tds:
+        tables = td.find_all('table')
+        for table in tables:
+            print(table.prettify())
+    
+    
 
 def initNode(graph, url):
     try:
@@ -20,6 +34,7 @@ def initNode(graph, url):
             field = driver.find_element(By.XPATH, "//div[child::h4[text()='Field of Education']]/div/div").text
         except:
             field = ''
+        capacity = getCapacity(driver.find_element(By.XPATH, "//div[child::h4[text()='Timetable']]/div/div/a").get_attribute("href"))
         # Not all courses have prerequisites; if the conditions box is not found, assume empty
         try:
             prereqs = re.sub('Pre-?requisites?:', '', driver.find_element(By.XPATH, "//div[@id='ConditionsforEnrolment']/div[2]/div").text)
