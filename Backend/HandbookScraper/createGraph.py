@@ -30,7 +30,7 @@ def getCapacity(timetableLink):
                     if (not re.search('[lL]ecture', activity) and not re.search('[eE]nrolment', activity)) or re.search('Sequence [^1]+ of [0-9]', activity):
                         continue
                     match = re.search('([0-9]+)/([0-9]+)', row.find_all('td', class_='data')[5].text)
-                    total += int(match.group(2))
+                    total += int(match.group(1))
             except:
                 continue
                 

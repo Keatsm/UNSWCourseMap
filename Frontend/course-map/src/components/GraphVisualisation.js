@@ -33,7 +33,15 @@ const GraphVisualisation = ({ graphData, titleHeight }) => {
     };
     const nodes = new DataSet(graphData.nodes);
     const edges = new DataSet(graphData.edges);
+    const scaledNodes = graphData.nodes.map(node => ({
+      ...node,
+      font: {
+        size: Math.max(15, Math.sqrt(Math.sqrt(node.data.capacity === undefined ? 100 : node.data.capacity)) * 5)
+      }
 
+    }));
+
+    nodes.update(scaledNodes);
     const data = { nodes, edges };
     const options = {
       edges: {
@@ -47,6 +55,18 @@ const GraphVisualisation = ({ graphData, titleHeight }) => {
         // Enable node selection
         selectConnectedEdges: false,
       },
+      physics: {
+        barnesHut: {
+            "gravitationalConstant": -10000,
+            "centralGravity": 1,
+            avoidOverlap: 0.1
+        },
+        minVelocity: 1,
+        repulsion: {
+          nodeDistance: 375
+        },
+        solver: 'repulsion'
+      }
     };
 
     const network = new Network(container.current, data, options);
@@ -62,7 +82,8 @@ const GraphVisualisation = ({ graphData, titleHeight }) => {
       display : 'flex',
       flexDirection : 'column',
       alignItems : 'center',
-      justifyContent : 'center'
+      justifyContent : 'center',
+      width: '100%'
     }}>
       {loadingGraph && 
       <Spinner animation="border" role="status">
