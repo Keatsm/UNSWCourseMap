@@ -12,13 +12,30 @@ def getCapacity(timetableLink):
     print(timetableLink)
     soup = BeautifulSoup(htmlContent, 'html.parser')
     tds = soup.find_all('td', class_='formBody')
+    total = 0
     for td in tds:
-        tables = td.find_all('table')
-        for table in tables:
-            print(table.prettify())
-    
-    
-
+        if not td.find('td', class_='data', text='Undergraduate'):
+            continue
+        subTds = td.find_all('td', class_='formBody')
+        for i, subTd in enumerate(subTds):
+            if i == 0:
+                continue
+            if not subTd.find('tr', class_='rowLowlight') and not subTd.find('tr', class_='rowHighlight'):
+                continue
+            try:
+                enrollments = subTd.find_all('table')[2]
+                rows =  enrollments.find_all('tr', class_='rowHighlight') + enrollments.find_all('tr', class_='rowLowlight')
+                for row in rows:
+                    activity = row.find_all('td')[0].find('a').text
+                    if (not re.search('[lL]ecture', activity) and not re.search('[eE]nrolment', activity)) or re.search('Sequence [^1]+ of [0-9]', activity):
+                        continue
+                    match = re.search('([0-9]+)/([0-9]+)', row.find_all('td', class_='data')[5].text)
+                    total += int(match.group(2))
+            except:
+                continue
+                
+    return total
+                
 def initNode(graph, url):
     try:
         print(url)
@@ -34,7 +51,10 @@ def initNode(graph, url):
             field = driver.find_element(By.XPATH, "//div[child::h4[text()='Field of Education']]/div/div").text
         except:
             field = ''
-        capacity = getCapacity(driver.find_element(By.XPATH, "//div[child::h4[text()='Timetable']]/div/div/a").get_attribute("href"))
+        try:
+            capacity = getCapacity(driver.find_element(By.XPATH, "//div[child::h4[text()='Timetable']]/div/div/a").get_attribute("href"))
+        except:
+            capacity = 0
         # Not all courses have prerequisites; if the conditions box is not found, assume empty
         try:
             prereqs = re.sub('Pre-?requisites?:', '', driver.find_element(By.XPATH, "//div[@id='ConditionsforEnrolment']/div[2]/div").text)
@@ -42,7 +62,7 @@ def initNode(graph, url):
         except:
             prereqs = ''
         print(courseCode, courseTitle, prereqs, offeringTerms, field)
-        graph.add_node(courseCode, attr={'specialNode' : False, 'courseTitle' : courseTitle, 'prereqs' : prereqs, 'offeringTerms' : offeringTerms, 'field' : field, 'url': url})
+        graph.add_node(courseCode, attr={'specialNode' : False, 'courseTitle' : courseTitle, 'prereqs' : prereqs, 'offeringTerms' : offeringTerms, 'field' : field, 'url': url, 'capacity' : capacity})
         driver.close()
     except Exception as e:
         print(str(e))

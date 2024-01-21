@@ -11,7 +11,8 @@ urls = [
     'https://www.handbook.unsw.edu.au/undergraduate/courses/2024/MATH1081/?year=2024',
     'https://www.handbook.unsw.edu.au/undergraduate/courses/2024/COMP2521/?year=2024',
     'https://www.handbook.unsw.edu.au/undergraduate/courses/2024/COMP2041/?year=2024',
-    'https://www.handbook.unsw.edu.au/undergraduate/courses/2024/COMP2511/?year=2024'
+    'https://www.handbook.unsw.edu.au/undergraduate/courses/2024/COMP2511/?year=2024',
+    'https://www.handbook.unsw.edu.au/undergraduate/courses/2024/COMP3121/?year=2024'
 ]
 
 # Some weird cases
@@ -37,5 +38,5 @@ properCollapse = [
     'https://www.handbook.unsw.edu.au/undergraduate/courses/2024/COMP3151?year=2024'
 ]
 
-nx.draw(createGraph(urlsWeird), with_labels=True, font_weight='bold')
+nx.draw(createGraph(urls), with_labels=True, font_weight='bold')
 plt.show()
