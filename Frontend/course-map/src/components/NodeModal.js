@@ -2,9 +2,9 @@ import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
 const NodeModal = ({ showModal, handleClose, node }) => {
-    const redirectToHandbook = () => {
-      const newTab = window.open(node !== undefined ? node.data.url : 'https://google.com', '_blank');
-      newTab.focus(); // Optional: Set focus on the new tab
+    const redirectToHandbook = (link) => {
+      const newTab = window.open(link);
+      newTab.focus();
     };
     return ( <div>{ node &&
       <Modal show={showModal} onHide={handleClose}>
@@ -22,12 +22,15 @@ const NodeModal = ({ showModal, handleClose, node }) => {
           <p><strong>Field: </strong>{node.data.field}</p>
         </Modal.Body>
         <Modal.Footer>
-            <Button variant="Primary" onClick={redirectToHandbook}>
-                Handbook
-            </Button>
-            <Button variant="secondary" onClick={handleClose}>
-                Close
-            </Button>
+          <Button variant="primary" onClick={() => redirectToHandbook(node !== undefined ? 'https://unilectives.csesoc.app/course/' + node.label : 'https://google.com', '_blank')}>
+              Reviews
+          </Button>
+          <Button variant="primary" onClick={() => redirectToHandbook(node !== undefined ? node.data.url : 'https://google.com', '_blank')}>
+              Handbook
+          </Button>
+          <Button variant="secondary" onClick={handleClose}>
+              Close
+          </Button>
         </Modal.Footer>
       </Modal>
     }</div> );

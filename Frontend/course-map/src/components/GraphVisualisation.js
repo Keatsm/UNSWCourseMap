@@ -3,6 +3,7 @@ import { Network } from "vis-network/peer/esm/vis-network";
 import { DataSet } from "vis-data/peer/esm/vis-data";
 import NodeModal from './NodeModal.js';
 import Spinner from 'react-bootstrap/Spinner';
+import Legend from './Legend.js';
 
 
 const GraphVisualisation = ({ graphData, titleHeight }) => {
@@ -90,7 +91,9 @@ const GraphVisualisation = ({ graphData, titleHeight }) => {
         <span className="visually-hidden">Loading...</span>
       </Spinner>}
       <div ref={container} style={{ width: '100%', height: windowSize.current[1] - titleHeight}} />
+      <Legend />
       <NodeModal showModal={showModal} handleClose={handleClose} node={selectedNode} />
+      
     </div>
   );
 };
