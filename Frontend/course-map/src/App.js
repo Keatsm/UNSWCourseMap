@@ -42,7 +42,7 @@ const App = () => {
 
   // Fetch graph data from Neo4j or API on component mount
   useEffect(() => {
-      axios.get('http://127.0.0.1:5000/graph')
+      axios.get('unsw-course-map-backend-eight.vercel.app/graph')
       .then(response => {
         let newData = {
           nodes: [],
