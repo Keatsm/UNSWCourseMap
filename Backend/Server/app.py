@@ -2,10 +2,13 @@ from flask import Flask, jsonify
 from neo4j import GraphDatabase
 from dotenv import load_dotenv, find_dotenv
 import os
-
-load_dotenv(find_dotenv())
+from flask import Flask
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, origins="https://unsw-course-map-frontend.vercel.app")
+
+load_dotenv(find_dotenv())
 
 # Connect to Neo4j
 driver = GraphDatabase.driver(os.getenv("NEO4J_URI"), auth=(os.getenv("NEO4J_USERNAME"), os.getenv("NEO4J_PASSWORD")))
@@ -42,17 +45,10 @@ def getGraph():
                 "type": relationship.type
             })
 
-    # Create a JSON response with nodes and relationships
-    response = {
+    return jsonify({
         "nodes": nodes,
         "relationships": relationships
-    }
-    
-    response = jsonify(response)
-    
-    response.headers.add('Access-Control-Allow-Origin', '*')
-
-    return response
+    })
 
 if __name__ == '__main__':
     app.run(port=5000)
