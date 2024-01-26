@@ -15,7 +15,7 @@
 - [ ] Update readme with additional information/instructions
 - [ ] Improve styling of code (mostly for react code)
 - [ ] Generally make frontend more appealling
-- [ ] Colour code nodes on subject area
+- [X] Colour code nodes on subject area
 - [ ] Test using GPT API to get a more accurate read on subject area (as opposed to the handbook)
 - [ ] Enabled/disable different terms
 - [X] Hover on node for additional information (maybe a modal with a link to course page)

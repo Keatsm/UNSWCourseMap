@@ -6,7 +6,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import Legend from './Legend.js';
 
 
-const GraphVisualisation = ({ graphData, titleHeight }) => {
+const GraphVisualisation = ({ graphData, titleHeight, hexMap }) => {
   const [selectedNode, setSelectedNode] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [loadingGraph, setLoadingGraph] = useState(true);
@@ -38,6 +38,9 @@ const GraphVisualisation = ({ graphData, titleHeight }) => {
       ...node,
       font: {
         size: Math.max(15, Math.sqrt(Math.sqrt(node.data.capacity === undefined ? 100 : node.data.capacity)) * 5)
+      },
+      color: {
+        background: hexMap[node.data.field]
       }
 
     }));
@@ -45,7 +48,14 @@ const GraphVisualisation = ({ graphData, titleHeight }) => {
     nodes.update(scaledNodes);
     const data = { nodes, edges };
     const options = {
+      nodes: {
+        color: {
+          border: 'black',
+          background: '#d4d4d4'
+        },
+      },
       edges: {
+        color : 'black',
         arrows: {
           to: {
             enabled: true
@@ -60,14 +70,15 @@ const GraphVisualisation = ({ graphData, titleHeight }) => {
         barnesHut: {
             "gravitationalConstant": -10000,
             "centralGravity": 1,
-            avoidOverlap: 0.1
+            avoidOverlap: 0.5
         },
         minVelocity: 1,
         repulsion: {
           nodeDistance: 375
         },
         solver: 'repulsion'
-      }
+      },
+      
     };
 
     const network = new Network(container.current, data, options);
@@ -76,7 +87,7 @@ const GraphVisualisation = ({ graphData, titleHeight }) => {
     return () => {
       network.destroy(); // Clean up network on component unmount
     };
-  }, [graphData]);
+  }, [graphData, hexMap]);
 
   return (
     <div style={{
@@ -91,7 +102,7 @@ const GraphVisualisation = ({ graphData, titleHeight }) => {
         <span className="visually-hidden">Loading...</span>
       </Spinner>}
       <div ref={container} style={{ width: '100%', height: windowSize.current[1] - titleHeight}} />
-      <Legend />
+      {!loadingGraph && <Legend tailWindMap={hexMap} />}
       <NodeModal showModal={showModal} handleClose={handleClose} node={selectedNode} />
       
     </div>
