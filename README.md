@@ -1,5 +1,7 @@
 # UNSWCourseMap
 
+Deployed [here](https://unsw-course-map.vercel.app/).
+
 ## Todo
 - [x] Operational course scraper for COMP, SENG and relevant MATH courses
 - [x] Add information about terms, course field, etc.
@@ -11,7 +13,7 @@
 - [ ] COMP9301 bug
 - [ ] See if there is a way to resume the database if it is paused (if not probably change database)
 - [x] Make certain course nodes a bigger scale based on how many people take the course (scrape timetable as well)
-- [ ] Deploy
+- [x] Deploy
 - [ ] Update readme with additional information/instructions
 - [ ] Improve styling of code (mostly for react code)
 - [ ] Generally make frontend more appealling
