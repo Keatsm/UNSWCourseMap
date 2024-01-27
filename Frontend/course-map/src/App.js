@@ -42,7 +42,7 @@ const App = () => {
 
   // Fetch graph data from Neo4j or API on component mount
   useEffect(() => {
-      axios.get('http://unswcoursemap-production.up.railway.app/graph')
+      axios.get('https://unswcoursemap-production.up.railway.app/graph')
       .then(response => {
         let newData = {
           nodes: [],
