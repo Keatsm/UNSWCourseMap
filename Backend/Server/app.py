@@ -6,7 +6,7 @@ from flask import Flask
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, origins="https://unsw-course-map-frontend.vercel.app")
+CORS(app, origins="https://unsw-course-map.vercel.app")
 
 load_dotenv(find_dotenv())
 
