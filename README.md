@@ -27,5 +27,7 @@ Deployed [here](https://unsw-course-map.vercel.app/).
 - [ ] Add other courses (eg COMM, ARTS, etc); maybe enabled which ones you want
 - [ ] Add postgraduate option
 - [ ] Add any mark prerequisites as edges on the graph
+- [ ] Hover on nodes to view prereqs
+- [ ] Find better colours for node fields
 
 
