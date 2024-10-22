@@ -3,6 +3,7 @@ import GraphVisualization from './components/GraphVisualisation.js';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
+import { BACKEND } from './config.js';
 
 const colorList = [
   '#e8b2b2',
@@ -42,7 +43,7 @@ const App = () => {
 
   // Fetch graph data from Neo4j or API on component mount
   useEffect(() => {
-      axios.get('https://unswcoursemap-production.up.railway.app/graph')
+      axios.get(`${BACKEND}/graph`)
       .then(response => {
         let newData = {
           nodes: [],

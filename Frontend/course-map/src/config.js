@@ -1,0 +1,1 @@
+export const BACKEND = 'https://unsw-course-map-backend.vercel.app';
